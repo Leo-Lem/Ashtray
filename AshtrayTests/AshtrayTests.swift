@@ -19,15 +19,7 @@ class AshtrayTests: XCTestCase {
     }
 
     //MARK: - test model objects
-    func testGettingEntryIDFromDate() {
-        let id = try? Entry.getIDFromDate(Date())
-        
-        XCTAssertNotNil(id)
-    }
     
-    func testIntializingEntryFromDate() {
-        XCTAssertNoThrow(try Entry(Date()))
-    }
     
     //MARK: - test view logic
     
@@ -48,5 +40,76 @@ class AshtrayTests: XCTestCase {
         let stateController = StateController()
         
         XCTAssertNotNil(try? stateController.load())
+    }
+    
+    //MARK: storage controller
+    
+    
+    
+    //MARK: calculation controller
+    func testCalculatingTotal() {
+        let date = TestData.entry.id
+        
+        var total = calculateTotal(for: .day(date))
+        XCTAssertEqual(total, 5)
+        
+        total = calculateTotal(for: .week(date))
+        XCTAssertEqual(total, 55)
+        
+        total = calculateTotal(for: .month(date))
+        XCTAssertEqual(total, 230)
+        
+        let startDate = TestData.entries[4].id
+        total = calculateTotal(for: .alltime(date, startDate))
+        XCTAssertEqual(total, 350)
+    }
+    
+    func testCalculatingAverage() {
+        let date = TestData.entry.id
+        
+        //day
+        var average = calculateAverage(for: .day(date), with: .daily)
+        XCTAssertEqual(average, 5)
+        
+        //week
+        average = calculateAverage(for: .week(date), with: .daily)
+        XCTAssertEqual(average, 7.5, accuracy: 0.5)
+        
+        //month
+        average = calculateAverage(for: .month(date), with: .daily)
+        XCTAssertEqual(average, 7.5, accuracy: 0.5)
+        
+        average = calculateAverage(for: .month(date), with: .weekly)
+        XCTAssertEqual(average, 52.5, accuracy: 2.5)
+        
+        //alltime
+        let startDate = TestData.entries[4].id
+        average = calculateAverage(for: .alltime(date, startDate), with: .daily)
+        XCTAssertEqual(average, 7.5, accuracy: 0.5)
+        
+        average = calculateAverage(for: .alltime(date, startDate), with: .weekly)
+        XCTAssertEqual(average, 52.5, accuracy: 2.5)
+        
+        average = calculateAverage(for: .alltime(date, startDate), with: .monthly)
+        XCTAssertEqual(average, 225, accuracy: 15)
+    }
+    
+    private func calculateTotal(
+        for timespan: CalculationController.Timespan
+    ) -> Int {
+        let cc = CalculationController()
+        let entries = TestData.entries
+        
+        return cc.calculateTotal(for: timespan, in: entries)
+    }
+    
+    private func calculateAverage(
+        for timespan: CalculationController.Timespan,
+        with interval: CalculationController.Interval
+    ) -> Double {
+        let cc = CalculationController()
+        let entries = TestData.entries
+        
+        return cc.calculateAverage(for: timespan, with: interval, in: entries)
     }
 }

@@ -18,6 +18,6 @@ extension StatView {
 //MARK: - Previews
 struct StatViewContent_Previews: PreviewProvider {
     static var previews: some View {
-        HistView.Content()
+        StatView.Content()
     }
 }

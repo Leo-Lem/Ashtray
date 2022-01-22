@@ -13,4 +13,15 @@ struct PrefView: View {
     var body: some View {
         Content()
     }
+    
+    /*
+     //MARK: ideas for settable preferences
+     
+     - start date
+     - import / export (JSON)
+     - cloud storage
+     - default number of cigarettes to add per click
+     - ...
+     
+     */
 }

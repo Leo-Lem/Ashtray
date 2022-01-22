@@ -6,23 +6,16 @@
 //
 
 import Foundation
-import MyOthers
+import MyDates
 
 struct Entry: Codable, Identifiable {
-    let id: String
-    var amount: Int
-    
-    init(_ date: Date, amount: Int = 0) throws {
-        self.id = try Self.getIDFromDate(date)
-        self.amount = amount
+    let id: Date
+    var amount: Int {
+        didSet { if amount < 0 { amount = 0 } }
     }
     
-    init(_ id: ID, amount: Int = 0) {
-        self.id = id
+    init(_ date: Date, amount: Int = 0) {
+        self.id = date.startOfDay()!
         self.amount = amount
-    }
-    
-    static func getIDFromDate(_ date: Date) throws -> ID {
-        date.getString("dd-MM-yyyy")
     }
 }

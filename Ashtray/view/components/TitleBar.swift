@@ -6,20 +6,37 @@
 //
 
 import SwiftUI
+import MyCustomUI
 
 extension AshtrayView {
-    struct TitleBar: View {
+    struct TitleBar: ViewModifier {
         @Binding var selectedOverlay: Overlay
         
-        var body: some View {
-            Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        func body(content: Content) -> some View {
+            content
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        SymbolButton("pref-button-symbol"~) { selectedOverlay = .pref }
+                    }
+                    
+                    ToolbarItem(placement: .principal) {
+                        Text("app-title"~).font("default-font"~)
+                    }
+                    
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        SymbolButton("info-button-symbol"~) { selectedOverlay = .info }
+                    }
+                }
+                .embedInNavigation()
         }
     }
 }
 
 //MARK: - Previews
-struct AshtrayViewTitleBar_Previews: PreviewProvider {
+struct TitleBar_Previews: PreviewProvider {
     static var previews: some View {
-        AshtrayView.TitleBar()
+        Text("Hello World!")
+            .modifier(AshtrayView.TitleBar(selectedOverlay: .constant(.none)))
     }
 }

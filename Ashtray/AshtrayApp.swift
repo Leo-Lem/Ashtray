@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct AshtrayApp: App {
+    let stateController = StateController()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AshtrayView()
+                .environmentObject(stateController)
         }
     }
 }
