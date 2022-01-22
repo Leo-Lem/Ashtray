@@ -6,11 +6,31 @@
 //
 
 import SwiftUI
+import MyCustomUI
 
 extension InfoView {
     struct Content: View {
         var body: some View {
-            Text("InfoView")
+            VStack {
+                Section {
+                    Text("info-text"~)
+                        .font(size: 15)
+                        .multilineTextAlignment(.center)
+                        .rowItem()
+                }
+                
+                Section("credits-label"~) {
+                    Text("credits-text"~)
+                        .rowItem()
+                }
+                
+                Spacer()
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) { Text("info-label"~).font(.title) }
+            }
+            .embedInNavigation()
+            .blendMode(.lighten)
         }
     }
 }
